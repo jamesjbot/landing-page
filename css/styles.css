@@ -73,6 +73,7 @@ a {
 .navbar__menu ul {
     display: flex;
     flex-flow: row;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
     /*padding-left: 1fr;*/
