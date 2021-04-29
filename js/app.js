@@ -1,37 +1,37 @@
 /*jshint esversion: 6*/
 /**
- *
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and onScreenLinkss section in viewport upon scrolling.
- *
- * Dependencies: None
- *
- * JS Version: ES2015/ES6
- *
- * JS Standard: ESlint
- *
+*
+* Manipulating the DOM exercise.
+* Exercise programmatically builds navigation,
+* scrolls to anchors from navigation,
+* and onScreenLinkss section in viewport upon scrolling.
+*
+* Dependencies: None
+*
+* JS Version: ES2015/ES6
+*
+* JS Standard: ESlint
+*
 */
 
 /**
- * Define Global Variables
- *
+* Define Global Variables
+*
 */
 
 
 /**
- * End Global Variables
- * Start Helper Functions
- *
+* End Global Variables
+* Start Helper Functions
+*
 */
 
 
 
 /**
- * End Helper Functions
- * Begin Main Functions
- *
+* End Helper Functions
+* Begin Main Functions
+*
 */
 
 // build the nav
@@ -43,13 +43,14 @@ var navbar = document.getElementById("navbar__list");
 
 var sticky = navbar.offsetTop;
 
+// TODO REMOVE
 function myFunction() {
   /*if (window.pageYOffset >= sticky) {
-    navbar.classList.add("stick")
-  } else {
-    navbar.classList.remove("sticky");
-  }
-  */
+  navbar.classList.add("stick")
+} else {
+navbar.classList.remove("sticky");
+}
+*/
 }
 
 
@@ -57,9 +58,9 @@ function myFunction() {
 
 // Capture Clicks Everywhere on the page.
 document.addEventListener("click",
-  function(event) {
-    //alert(`You clicked ${event.target.innerText} `);
-  }
+function(event) {
+  //alert(`You clicked ${event.target.innerText} `);
+}
 );
 
 
@@ -68,17 +69,17 @@ document.addEventListener("click",
 //const navOutput = document.getElementById("navoutput");
 // Detect Scrolling event
 document.addEventListener("scroll",
-  function(event) {
-    //alert(`You are scrolling ${event.}`);
-    if (event === null) {return;}
-    //navOutput.innerText = `${event.type} ${event.timeStamp}`;
-  }
+function(event) {
+  //alert(`You are scrolling ${event.}`);
+  if (event === null) {return;}
+  //navOutput.innerText = `${event.type} ${event.timeStamp}`;
+}
 );
 
 /**
- * End Main Functions
- * Begin Events
- *
+* End Main Functions
+* Begin Events
+*
 */
 
 // Build menu
@@ -109,18 +110,18 @@ for (const section of staticNodeListOfSections){
 
 }
 
-  function putSectionNameOnMenuLink(section, anchor) {
-    // Attach data-nav name to menulink
-    const dataAttribute = section.getAttribute("data-nav");
-    anchor.textContent = dataAttribute;
-  }
+function putSectionNameOnMenuLink(section, anchor) {
+  // Attach data-nav name to menulink
+  const dataAttribute = section.getAttribute("data-nav");
+  anchor.textContent = dataAttribute;
+}
 
 // Scroll to section on link click
 
 function attachPageTargetForClickToScroll(pageTarget,anchor) {
 
-    const idAttribute = pageTarget.getAttribute("id");
-    anchor.setAttribute('href',`#${idAttribute}`);
+  const idAttribute = pageTarget.getAttribute("id");
+  anchor.setAttribute('href',`#${idAttribute}`);
 }
 
 
@@ -130,7 +131,7 @@ function attachPageTargetForClickToScroll(pageTarget,anchor) {
 
 // Create an observer to watch when a section appears on screen
 const observer = new IntersectionObserver(
-// When 25% of a section is visible; this will capture that event
+  // When 25% of a section is visible; this will capture that event
   (events) => {
     for (const event of events) {
       if (event.isIntersecting === true) {
@@ -156,12 +157,12 @@ for (const item of containerOfElements) {
 // Set sections as active
 function onScreenLinksNavBarEventProcessing(event,nameOfSection) {
 
-    const navbarHTMLElement = document.querySelector('.navbar__menu');
-    if (navbarHTMLElement != null) {
-      // Search for the node that needs onScreenLinksing
-      const onScreenLinks = navbarHTMLElement.getElementsByTagName('a');
-      turnOnOrOffColoringBasedOnLastSectionAppearing(onScreenLinks,nameOfSection);
-    }
+  const navbarHTMLElement = document.querySelector('.navbar__menu');
+  if (navbarHTMLElement != null) {
+    // Search for the node that needs onScreenLinksing
+    const onScreenLinks = navbarHTMLElement.getElementsByTagName('a');
+    turnOnOrOffColoringBasedOnLastSectionAppearing(onScreenLinks,nameOfSection);
+  }
 }
 
 
