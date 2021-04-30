@@ -43,35 +43,50 @@ var navbar = document.getElementById("navbar__list");
 
 var sticky = navbar.offsetTop;
 
-// TODO REMOVE
-function myFunction() {
-  /*if (window.pageYOffset >= sticky) {
-  navbar.classList.add("stick")
-} else {
-navbar.classList.remove("sticky");
+function myFUnction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add('sticky');
+  } else {
+    navbar.classList.remove('sticky');
+  }
 }
-*/
-}
-
-
-
 
 // Capture Clicks Everywhere on the page.
 document.addEventListener("click",
 function(event) {
   //alert(`You clicked ${event.target.innerText} `);
-}
-);
+});
+
+
+
 
 
 
 // Scroll to anchor ID using scrollTO event
 //const navOutput = document.getElementById("navoutput");
 // Detect Scrolling event
+let scrollDirection = null;
+let lastScrollPosition = null;
 document.addEventListener("scroll",
 function(event) {
   //alert(`You are scrolling ${event.}`);
   if (event === null) {return;}
+  //console.log('Scroll listener direction',window.scrollY);
+  if (lastScrollPosition == null) {
+    lastScrollPosition = window.scrollY;
+    return;
+  }
+  // if scrolling down
+  if (lastScrollPosition < window.scrollY) {
+    scrollDirection = 'down';
+  } else {
+    scrollDirection = 'up';
+  }
+  lastScrollPosition = window.scrollY;
+  //output = document.getElementById('test-output');
+  //activeelement = document.querySelector('your-active-class');
+  //console.log(activeelement);
+  //output.innerText = `hello`;
   //navOutput.innerText = `${event.type} ${event.timeStamp}`;
 }
 );
@@ -104,11 +119,13 @@ for (const section of staticNodeListOfSections){
   newListElement.appendChild(anchor);
   navBarTarget.appendChild(newListElement);
 
+
   putSectionNameOnMenuLink(section, anchor);
 
   attachPageTargetForClickToScroll(section, anchor);
 
 }
+
 
 function putSectionNameOnMenuLink(section, anchor) {
   // Attach data-nav name to menulink
@@ -130,20 +147,25 @@ function attachPageTargetForClickToScroll(pageTarget,anchor) {
 
 
 // Create an observer to watch when a section appears on screen
+let IDforLastSectionHighlighted = null;
 const observer = new IntersectionObserver(
   // When 25% of a section is visible; this will capture that event
-  (events) => {
+  // Callback
+  (events, observer) => {
     for (const event of events) {
-      if (event.isIntersecting === true) {
-        onScreenLinksNavBarEventProcessing(event,event.target.getAttribute("data-nav"));
-        //TODO is section highligiting needed
-        event.target.classList.add('your-active-class');
-      } else {
-        //TODO is section onScreenLinksing needed
-        event.target.classList.remove('your-active-class');
+      // 45% or 65% intersection
+      if (event.isIntersecting === false) { continue;}
+      if (scrollDirection == 'down') {
+        if (event.intersectionRatio >= 0.45) {
+          onScreenLinksNavBarEventProcessing(event,event.target.getAttribute("data-nav"));
+        }
+      } else { //scrollDirection is up
+        if (event.intersectionRatio >= 0.65) {
+          onScreenLinksNavBarEventProcessing(event,event.target.getAttribute("data-nav"));
+        }
       }
     }
-  }, {rootMargin: '0px', threshold: 0.25}
+  }, {root:null, rootMargin: '0px', threshold: [0.45,0.65]}
 );
 
 // Attach an observer to each section to onScreenLinks the navigation bar
@@ -161,23 +183,22 @@ function onScreenLinksNavBarEventProcessing(event,nameOfSection) {
   if (navbarHTMLElement != null) {
     // Search for the node that needs onScreenLinksing
     const onScreenLinks = navbarHTMLElement.getElementsByTagName('a');
-    turnOnOrOffColoringBasedOnLastSectionAppearing(onScreenLinks,nameOfSection);
+    toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection);
   }
 }
 
 
-function turnOnOrOffColoringBasedOnLastSectionAppearing(onScreenLinks,nameOfSection) {
+function toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection) {
   // Iterate across elements onScreenLinksing newly encoutered section and unhighligthing the rest.
   for (const link of onScreenLinks) {
 
     if (link.innerText == nameOfSection) {
 
       // Turn On coloring for listitem
-      link.parentElement.classList.toggle('onScreenLinks');
+      link.parentElement.classList.add('onScreenLinks');
 
-    } else {
+    } else { // Turn Off Coloring for list item
 
-      // Turn Off Coloring for list item
       if (link.parentElement.classList.contains('onScreenLinks')) {
         link.parentElement.classList.toggle('onScreenLinks');
       }
