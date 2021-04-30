@@ -36,32 +36,6 @@
 
 // build the nav
 
-// Hiding navbar
-//onscroll = function() {myFundtion()};
-
-var navbar = document.getElementById("navbar__list");
-
-var sticky = navbar.offsetTop;
-
-function myFUnction() {
-  if (window.pageYOffset >= sticky) {
-    navbar.classList.add('sticky');
-  } else {
-    navbar.classList.remove('sticky');
-  }
-}
-
-// Capture Clicks Everywhere on the page.
-document.addEventListener("click",
-function(event) {
-  //alert(`You clicked ${event.target.innerText} `);
-});
-
-
-
-
-
-
 // Scroll to anchor ID using scrollTO event
 //const navOutput = document.getElementById("navoutput");
 // Detect Scrolling event
@@ -83,11 +57,6 @@ function(event) {
     scrollDirection = 'up';
   }
   lastScrollPosition = window.scrollY;
-  //output = document.getElementById('test-output');
-  //activeelement = document.querySelector('your-active-class');
-  //console.log(activeelement);
-  //output.innerText = `hello`;
-  //navOutput.innerText = `${event.type} ${event.timeStamp}`;
 }
 );
 
