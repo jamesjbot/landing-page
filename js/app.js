@@ -19,6 +19,9 @@
 *
 */
 
+// Scrolling Event Variables
+let scrollDirection = null;
+let lastScrollPosition = null;
 
 /**
 * End Global Variables
@@ -26,6 +29,57 @@
 *
 */
 
+// When give a section and anchor tag, put the section name on anchor tag.
+
+function putSectionNameOnMenuLink(section, anchor) {
+  // Attach data-nav name to menulink
+  const dataAttribute = section.getAttribute("data-nav");
+  anchor.textContent = dataAttribute;
+}
+
+
+// Scroll to section on link click
+
+function attachPageTargetForClickToScroll(pageTarget,anchor) {
+
+  const idAttribute = pageTarget.getAttribute("id");
+  anchor.setAttribute('href',`#${idAttribute}`);
+}
+
+
+// Toggle the Navigation Bar background highlight when enough of the section
+// is scrolled into view
+
+function onScreenLinksNavBarEventProcessing(event,nameOfSection) {
+
+  const navbarHTMLElement = document.querySelector('.navbar__menu');
+  if (navbarHTMLElement != null) {
+    // Search for the node that needs onScreenLinksing
+    const onScreenLinks = navbarHTMLElement.getElementsByTagName('a');
+    toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection);
+  }
+}
+
+
+// Process each Navigation link and highlight or unhighlight as needed
+
+function toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection) {
+  // Iterate across elements onScreenLinksing newly encoutered section and unhighligthing the rest.
+  for (const link of onScreenLinks) {
+
+    if (link.innerText == nameOfSection) {
+
+      // Turn On coloring for listitem
+      link.parentElement.classList.add('onScreenLinks');
+
+    } else { // Turn Off Coloring for list item
+
+      if (link.parentElement.classList.contains('onScreenLinks')) {
+        link.parentElement.classList.toggle('onScreenLinks');
+      }
+    }
+  }
+}
 
 
 /**
@@ -34,39 +88,7 @@
 *
 */
 
-// build the nav
-
-// Scroll to anchor ID using scrollTO event
-//const navOutput = document.getElementById("navoutput");
-// Detect Scrolling event
-let scrollDirection = null;
-let lastScrollPosition = null;
-document.addEventListener("scroll",
-function(event) {
-  //alert(`You are scrolling ${event.}`);
-  if (event === null) {return;}
-  //console.log('Scroll listener direction',window.scrollY);
-  if (lastScrollPosition == null) {
-    lastScrollPosition = window.scrollY;
-    return;
-  }
-  // if scrolling down
-  if (lastScrollPosition < window.scrollY) {
-    scrollDirection = 'down';
-  } else {
-    scrollDirection = 'up';
-  }
-  lastScrollPosition = window.scrollY;
-}
-);
-
-/**
-* End Main Functions
-* Begin Events
-*
-*/
-
-// Build menu
+// Build the Navigation menu
 
 // Dynamically add Section items to menu
 
@@ -88,7 +110,6 @@ for (const section of staticNodeListOfSections){
   newListElement.appendChild(anchor);
   navBarTarget.appendChild(newListElement);
 
-
   putSectionNameOnMenuLink(section, anchor);
 
   attachPageTargetForClickToScroll(section, anchor);
@@ -96,25 +117,35 @@ for (const section of staticNodeListOfSections){
 }
 
 
-function putSectionNameOnMenuLink(section, anchor) {
-  // Attach data-nav name to menulink
-  const dataAttribute = section.getAttribute("data-nav");
-  anchor.textContent = dataAttribute;
+/**
+* End Main Functions
+* Begin Events
+*
+*/
+
+// Detect Scrolling event
+
+document.addEventListener("scroll",
+function(event) {
+  //alert(`You are scrolling ${event.}`);
+  if (event === null) {return;}
+  //console.log('Scroll listener direction',window.scrollY);
+  if (lastScrollPosition == null) {
+    lastScrollPosition = window.scrollY;
+    return;
+  }
+  // if scrolling down
+  if (lastScrollPosition < window.scrollY) {
+    scrollDirection = 'down';
+  } else {
+    scrollDirection = 'up';
+  }
+  lastScrollPosition = window.scrollY;
 }
-
-// Scroll to section on link click
-
-function attachPageTargetForClickToScroll(pageTarget,anchor) {
-
-  const idAttribute = pageTarget.getAttribute("id");
-  anchor.setAttribute('href',`#${idAttribute}`);
-}
+);
 
 
-// onScreenLinks Navigation Sections when scrolling
-// Add class 'active' to section when near top of viewport
-
-
+// Add class 'active' to Navigation bar section when enough of section in viewport
 // Create an observer to watch when a section appears on screen
 let IDforLastSectionHighlighted = null;
 const observer = new IntersectionObserver(
@@ -137,40 +168,14 @@ const observer = new IntersectionObserver(
   }, {root:null, rootMargin: '0px', threshold: [0.45,0.65]}
 );
 
-// Attach an observer to each section to onScreenLinks the navigation bar
-//const containerOfElements = document.querySelectorAll(".landing__container");
+// Attach an observer to each section in index.html
 const containerOfElements = document.querySelectorAll("section");
 for (const item of containerOfElements) {
   observer.observe(item);
 }
 
 
-// Set sections as active
-function onScreenLinksNavBarEventProcessing(event,nameOfSection) {
-
-  const navbarHTMLElement = document.querySelector('.navbar__menu');
-  if (navbarHTMLElement != null) {
-    // Search for the node that needs onScreenLinksing
-    const onScreenLinks = navbarHTMLElement.getElementsByTagName('a');
-    toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection);
-  }
-}
-
-
-function toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection) {
-  // Iterate across elements onScreenLinksing newly encoutered section and unhighligthing the rest.
-  for (const link of onScreenLinks) {
-
-    if (link.innerText == nameOfSection) {
-
-      // Turn On coloring for listitem
-      link.parentElement.classList.add('onScreenLinks');
-
-    } else { // Turn Off Coloring for list item
-
-      if (link.parentElement.classList.contains('onScreenLinks')) {
-        link.parentElement.classList.toggle('onScreenLinks');
-      }
-    }
-  }
-}
+/**
+* End Events
+*
+*/
