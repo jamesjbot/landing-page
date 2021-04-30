@@ -43,7 +43,8 @@ function putSectionNameOnMenuLink(section, anchor) {
 function attachPageTargetForClickToScroll(pageTarget,anchor) {
 
   const idAttribute = pageTarget.getAttribute("id");
-  anchor.setAttribute('href',`#${idAttribute}`);
+  anchor.setAttribute('id','navlink'+idAttribute);
+  //anchor.setAttribute('href',`#${idAttribute}`);
 }
 
 
@@ -81,6 +82,13 @@ function toggleNavbarHighlightFromScrolling(onScreenLinks,nameOfSection) {
   }
 }
 
+
+// Scrool to the provided section number
+function scrollToID(id) {
+  document.querySelector('#'+id).scrollIntoView({
+    behavior: 'smooth'
+  });
+}
 
 /**
 * End Helper Functions
@@ -122,6 +130,17 @@ for (const section of staticNodeListOfSections){
 * Begin Events
 *
 */
+
+// Detect clicks on navigation
+document.addEventListener('click',
+  function (event) {
+    console.log('clickoccured on',event);
+    console.log('id',event.target.id);
+    console.log('scrolling to',event.target.id.substring(7));
+    scrollToID(event.target.id.substring(7));
+  }
+);
+
 
 // Detect Scrolling event
 
